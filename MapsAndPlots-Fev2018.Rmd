@@ -1,0 +1,75 @@
+---
+title: "MapsAndPlots-Fev2018."
+author: "Nubia"
+date: "2 de fevereiro de 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Instalar e Carregar a bilbioteca do data.table - Tydiverse - e GGPLOT 2
+
+Carregando as bases de dados
+Esse mês farei gráficos e mapas com dados de mortalidade do Brasil e informações sócioeconômicas 
+Vou dar upload em 3 bases de dados
+1. PIB estados em 2015
+2. População Brasileira
+3. Casos de mortalidade
+
+Quando um arquivo CVS foi criado no excel, em geral ele salva com separador ; no lugar da ,.
+Isso pode impedir a leitura pelo R
+
+```{r Definindo o diretório e Carregando bancos}
+setwd("T:/Duke/Mapping/Dataset de Treinamento")
+GDPBR15 <- read.csv(file = "T:/Duke/Mapping/Dataset de Treinamento/GDPBrasil15.csv", header = T, sep = ";")
+```
+Transformando GDP em numero
+
+```{r GDP veio do csv com a configuração de vector}
+as.numeric(GDPBR15$GDP)
+
+```
+
+```
+
+```{r - Saber a escala de opções da Coluna Comp2014}
+unique(GDPBR15$Comp2014)
+```
+
+scales free: retira do mapa os estados que não são da região
+space: deixa todas as linhas do mesmo tamanho
+Coord_Flip: transforma o gráfico em barras horizontais
+
+```{r}
+ggplot(GDPBR15, aes(x=UnFed, y=GDP, fill= Comp2014))+
+  geom_bar(stat = "identity", width = 0.7) +
+  coord_flip()+ 
+    ggtitle("GDP por estado e região - Brasil 2015") + 
+        theme(panel.grid.minor = element_blank(),
+            panel.background = element_rect(fill = "white", colour = "grey"),
+            panel.grid.major.x = element_line( colour = "grey", size = (.1)),
+            axis.ticks = element_line(colour = "black", size=(.3)))+
+       theme(plot.title = element_text(lineheight=2, face="bold"))+
+ scale_fill_manual(values = c ("darkgreen","red2","peachpuff"), 
+            name="Comparação com 2014",
+            breaks=levels(factor(GDPBR15$Comp2014)),
+            labels=c("Aumentou GDP", "Reduziu GDP", "GDP sem alteração"))+
+  theme(legend.position="bottom")+
+  facet_grid(regiao~., scales = "free", space = "free") +
+  scale_y_continuous(name = "PIB per capta" ,limits = c(0,75000), expand = c(0, 0)) +
+  scale_x_discrete(name = "Unidade da Federação")+
+  theme(axis.text.x = element_text (face="bold", size=10),
+            axis.text.y = element_text (size=8)) +
+  theme(axis.title = element_text(family = "Serif", face="bold", size=10))
+```
+
+
+```{r}
+head(GDPBR15)
+View(GDPBR15)
+
+```
+
