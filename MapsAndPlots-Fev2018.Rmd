@@ -2,7 +2,9 @@
 title: "MapsAndPlots-Fev2018."
 author: "Nubia"
 date: "2 de fevereiro de 2018"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -23,15 +25,13 @@ Quando um arquivo CVS foi criado no excel, em geral ele salva com separador ; no
 Isso pode impedir a leitura pelo R
 
 ```{r Definindo o diretório e Carregando bancos}
-setwd("T:/Duke/Mapping/Dataset de Treinamento")
+
 GDPBR15 <- read.csv(file = "T:/Duke/Mapping/Dataset de Treinamento/GDPBrasil15.csv", header = T, sep = ";")
 ```
-Transformando GDP em numero
 
+Transformando GDP em numero
 ```{r GDP veio do csv com a configuração de vector}
 as.numeric(GDPBR15$GDP)
-
-```
 
 ```
 
@@ -42,6 +42,7 @@ unique(GDPBR15$Comp2014)
 scales free: retira do mapa os estados que não são da região
 space: deixa todas as linhas do mesmo tamanho
 Coord_Flip: transforma o gráfico em barras horizontais
+
 
 ```{r}
 ggplot(GDPBR15, aes(x=UnFed, y=GDP, fill= Comp2014))+
@@ -63,7 +64,7 @@ ggplot(GDPBR15, aes(x=UnFed, y=GDP, fill= Comp2014))+
   scale_x_discrete(name = "Unidade da Federação")+
   theme(axis.text.x = element_text (face="bold", size=10),
             axis.text.y = element_text (size=8)) +
-  theme(axis.title = element_text(family = "Serif", face="bold", size=10))
+  theme(axis.title = element_text(family = "arial", face="bold", size=10))
 ```
 
 
